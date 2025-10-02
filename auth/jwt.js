@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-const SECRET = "@APIsecret1"; // in production we will use .ENV variable
+dotenv.config();
+
+const SECRET = process.env.JWT_SECRET;
 
 export function generateToken(user) {
-  return jwt.sign({ id: user.id, name: user.name }, SECRET, {
+  return jwt.sign({ id: user.id, name: user.name, role: user.role }, SECRET, {
     expiresIn: "1h",
   });
 }
