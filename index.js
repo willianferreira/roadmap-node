@@ -7,6 +7,7 @@ import helmet from "helmet";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { requestTime } from "./middlewares/requestTime.js";
 import { pool } from "./config/db.js";
+import { setupSwagger } from "./config/swaggerConfig.js";
 
 const app = express();
 const PORT = 3000;
@@ -19,6 +20,8 @@ app.use(helmet());
 //global middleware
 app.use(requestTime);
 app.set("json spaces", 2);
+
+setupSwagger(app);
 
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
