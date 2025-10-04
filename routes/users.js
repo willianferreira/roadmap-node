@@ -18,20 +18,19 @@ router.get("/login", loginUser);
 
 /**
  * @swagger
- * tags:
- *   name: Users
- *   description: User management
- */
-
-/**
- * @swagger
  * /users:
  *   get:
  *     summary: Get list of users
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of users
+ *       401:
+ *         description: Access denied! Missing token
+ *       403:
+ *         description: Invalid token
  */
 router.get("/", authenticateToken, listUsers);
 

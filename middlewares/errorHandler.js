@@ -6,3 +6,9 @@ export function errorHandler(err, req, res, next) {
 
   res.status(status).json({ error: message });
 }
+
+export function throwNotFound(entity = "Resource") {
+  const err = new Error(`${entity} not found!`);
+  err.status = 404;
+  throw err;
+}

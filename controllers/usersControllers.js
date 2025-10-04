@@ -2,6 +2,7 @@ import * as userService from "../services/usersServices.js";
 import { generateToken } from "../auth/jwt.js";
 import { v4 as uuidv4 } from "uuid";
 import { getPageParams, PAGE_SIZE } from "../helpers/paginations.js";
+import { throwNotFound } from "../middlewares/errorHandler.js";
 
 export function loginUser(req, res, next) {
   const { name } = req.body;
@@ -41,13 +42,7 @@ export async function getUser(req, res, next) {
     const { id } = req.params;
     const user = await userService.getUserById(id);
 
-    //if (!user) return res.status(404).json({ error: "User not found" });
-
-    if (!user) {
-      const notFoundError = new Error("User not found!");
-      notFoundError.status = 404;
-      throw notFoundError;
-    }
+    if (!user) throwNotFound("User");
 
     res.json(user);
   } catch (err) {
@@ -71,8 +66,7 @@ export async function updateUser(req, res, next) {
     const { name, email } = req.body;
 
     const updateUser = await userService.updateUser(id, { name, email });
-
-    if (!updateUser) return res.status(404).json({ error: "User not found" });
+    if (!updateUser) throwNotFound("User");
 
     res.json(updateUser);
   } catch (err) {
@@ -86,6 +80,7 @@ export async function deleteUser(req, res, next) {
     const deleted = await userService.deleteUser(id);
 
     if (!deleted) return res.status(404).json({ error: "User not found" });
+    if (!deleted) throwNotFound("USer");
 
     res.json({ message: "User deleted successfully!" });
   } catch (err) {
